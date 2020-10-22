@@ -7,19 +7,9 @@
 
 <div class="container row" style="margin-top: 1rem">
   <div class="col-12">
-    <a href="#" class="list-group-item clearfix" *ngFor="let item of recipes">
-      <div class="float-left">
-        <h4 class="list-group-item-heading">{{ item.name }}</h4>
-        <p class="list-group-item-text">{{ item.description }}</p>
-      </div>
-      <span class="float-right"
-        ><img
-          [src]="item.imgPath"
-          alt="{{ item.name }}"
-          class="img-responsive"
-          style="max-width: 100px"
-      /></span>
-    </a>
-    <app-recipe-item></app-recipe-item>
+
+    <app-recipe-item *ngFor="let recipeEl of recipes"
+    [recipe] = "recipeEl"
+    (recipeSelected) = "onRecipeSelected(recipeEl)"></app-recipe-item>
   </div>
 </div>

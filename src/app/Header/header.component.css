@@ -2,12 +2,14 @@
   font-family: "Ubuntu", sans-serif;
   color: #707070;
   font-weight: 500;
+  font-size: 1.3rem;
 }
 
 h1 {
   font-family: "Lora", serif;
   font-weight: 400;
   color: orangered;
+  font-size: 4rem;
 }
 
 header {

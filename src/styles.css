@@ -1,1 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
+*,
+*::hover,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+.btn {
+  margin: 0.21rem;
+}
