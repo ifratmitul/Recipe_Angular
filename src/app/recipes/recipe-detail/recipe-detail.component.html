@@ -11,6 +11,7 @@
       <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Action
       </button>
+      <a class="btn btn-info" (click) = "addToShopping()">Send to Shopping list</a>
       <div class="dropdown-menu">
         <a class="dropdown-item" href="#">Action</a>
         <a class="dropdown-item" href="#">Another action</a>
@@ -37,5 +38,13 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-12">ingredients</div>
+  <div class="col-12">
+    <ul class="list-group">
+
+      <li class="list-group-item" *ngFor = "let ingredient of recipe.ingredients ">
+        {{ingredient.name}} : {{ingredient.amount}}
+      </li>
+
+    </ul>
+  </div>
 </div>
