@@ -8,17 +8,14 @@
 <div class="row">
   <div class="col-12">
     <div class="btn-group appDropdown">
-      <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Action
-      </button>
-      <a class="btn btn-info" (click) = "addToShopping()">Send to Shopping list</a>
-      <div class="dropdown-menu">
-        <a class="dropdown-item" href="#">Action</a>
-        <a class="dropdown-item" href="#">Another action</a>
-        <a class="dropdown-item" href="#">Something else here</a>
-        <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="#">Separated link</a>
+      <div class="btn-group" role="group" aria-label="Basic example">
+        <a class="btn btn-info btn-secondary" (click) = "addToShopping()">Send to Shopping list</a>
+        <a type="button" class="btn btn-info  btn-secondary" (click)="onEdit()">Edit Recipe</a>
+        <a type="button" class="btn btn-info btn-secondary">Middle</a>
+        <a type="button" class="btn btn-info btn-secondary">Right</a>
       </div>
+
+
     </div>
   </div>
 </div>
