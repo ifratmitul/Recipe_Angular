@@ -19,17 +19,8 @@ export class RecipeListComponent implements OnInit {
     this.recipes = this.recipeService.getRecipes();
   }
 
-  // onRecipeSelected(recipe:Recipe){
-
-  //     this.recipeWasSelected.emit(recipe);
-  // this is handdled by dpInjection
-
-  // }
-
-  onNew(){
-
-      this.router.navigate(['new'], {relativeTo: this.route})
-
-
+  onNew()
+  {
+    this.router.navigate(['new'], {relativeTo: this.route})
   }
 }
