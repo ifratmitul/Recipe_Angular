@@ -4,13 +4,16 @@
     <hr />
     <ul class="list-group">
       <a
-        href=""
+
         class="list-group-item"
         style="cursor: pointer"
-        *ngFor="let ingredient of ingredients"
+        *ngFor="let ingredient of ingredients; let i = index"
+        (click)="onEdit(i)"
       >
         {{ ingredient.name }} ({{ ingredient.amount }})
+        <button class="btn btn-danger" style="float: right;" (click) = "onDelete(i)">Delete</button>
       </a>
+
     </ul>
   </div>
 </div>
