@@ -4,7 +4,9 @@ import { Injectable } from "@angular/core";
 import { Router } from '@angular/router';
 import { BehaviorSubject, Subject, throwError } from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
+
 import { User } from './user.model';
+
 
 
 
@@ -26,6 +28,7 @@ export interface AuthResponseData{
 export class AuthService {
 
     user = new BehaviorSubject<User>(null);
+    private tokenExpirationTimer: any;
 
     
 
@@ -35,8 +38,25 @@ export class AuthService {
 
     logout(){
         this.user.next(null);
+        localStorage.removeItem('userData');
+
         this.router.navigate(['/auth']);
+        if(this.tokenExpirationTimer) {
+            clearTimeout(this.tokenExpirationTimer);
+        }
+
+        this.tokenExpirationTimer = null;
+
     }
+
+    autoLogout(expirationDuration:number){
+
+        this.tokenExpirationTimer =  setTimeout(() =>{
+              this.logout();
+          }, expirationDuration)
+  
+      }
+
     signUp(email:string, password:string){
 
         return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCzPED_KFtXun8NdNIclGRbqgTTcYtvhMM',
@@ -90,8 +110,34 @@ export class AuthService {
         const user = new User(email, userId,
              token, expirationDate);
              this.user.next(user);
+             this.autoLogout(expiresIn * 1000);
+             localStorage.setItem('userData',JSON.stringify(user))
 
     }
+
+    autologin(){
+        const userData : {
+            
+            email:string;
+            id:string;
+            _token:string;
+            _tokenExpirationDate:string;
+    
+        } = JSON.parse(localStorage.getItem('userData'))
+        if(!userData) return;
+
+        const loadedUser= new User(userData.email,
+             userData.id, userData._token, new Date(userData._tokenExpirationDate));
+
+             if(loadedUser.token){
+
+                 this.user.next(loadedUser);
+                 const expDuration = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
+                 this.autoLogout(expDuration);
+             }
+
+    }
+
 
 
 }
