@@ -1,8 +1,9 @@
+<ng-template appPlaceholder></ng-template>
 <div class="row">
     <div class="col-12 col-md-6 offset-md-3">
-        <div class="alert alert-danger" *ngIf="error">
-            <p>{{error}}</p>
-        </div>
+      <h3 class="alert alert-success col-md-6 offset-md-3 text-center">{{isLoginMode ? 'Login to see recipes':'Sign up if you dont have an account' }}</h3>
+      
+      <!-- <app-alert [message]="error" *ngIf="error" (close)="handleError()"></app-alert> -->
         <div *ngIf="isLoading" style="text-align: center;">
                 <app-loading-spinner></app-loading-spinner>
         </div>

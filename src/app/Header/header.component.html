@@ -10,7 +10,7 @@
         <li routerLinkActive="active" class="nav-item"><a routerLink="/feature" class="nav-link">Features</a></li>
         <li routerLinkActive="active" class="nav-item"><a routerLink="/recipes" class="nav-link">Recipe</a></li>
         <li routerLinkActive="active" class="nav-item"><a routerLink="/shopping-list" class="nav-link">Shoppig</a></li>
-        <li routerLinkActive="active" class="nav-item" *ngIf = "!isAuthenticated"><a routerLink="/auth" class="nav-link" >Authenticate</a></li>
+        <li routerLinkActive="active" class="nav-item" *ngIf = "!isAuthenticated"><a routerLink="/auth" class="nav-link" >Login/Signup</a></li>
         <li class="nav-item" *ngIf="isAuthenticated"><a class="nav-link"  (click)="onLogout()">Logout</a></li>
 
       </ul>
