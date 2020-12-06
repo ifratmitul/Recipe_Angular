@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Observable, Subscription } from 'rxjs';
 import { Ingredient } from '../shared/ingredient.model';
 import { ShoppingListService } from './shopping-list.service';
 @Component({
@@ -9,20 +10,30 @@ import { ShoppingListService } from './shopping-list.service';
   
 })
 export class ShoppingListComponent implements OnInit, OnDestroy {
-  ingredients: Ingredient[];
+  ingredients: Observable <{ingredients:Ingredient[]}>;
   private igchange :Subscription;
-  constructor(private shopingService: ShoppingListService) {}
+  
+  constructor(
+    private shopingService: ShoppingListService,
+    private store:Store<{
+      shoppingList:{
+      ingredients: Ingredient[]
+    }}> ) {
+
+    }
 
   ngOnInit(): void {
-      this.ingredients = this.shopingService.getIngredients();
-      this.igchange = this.shopingService.ingChanged.subscribe((ingredients:Ingredient[]) =>{
-        this.ingredients =  ingredients;
-      })
+      this.ingredients =this.store.select('shoppingList');
+
+      // this.ingredients = this.shopingService.getIngredients();
+      // this.igchange = this.shopingService.ingChanged.subscribe((ingredients:Ingredient[]) =>{
+      //   this.ingredients =  ingredients;
+      // })
 
   }
 
   ngOnDestroy(){
-    this.igchange.unsubscribe();
+    // this.igchange.unsubscribe();
   }
   onEdit(index:number){
 
