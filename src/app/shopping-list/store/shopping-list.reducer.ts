@@ -37,17 +37,17 @@ export function shoppingListReducer(state:State = intialState,
 
 
             case ShoppingListActions.UPDATE_INGREDIENTS:
-            const ingredient = state.ingredients[state.editedIngIndex];
-            const updatedIng = { ...ingredient, ...action.payload};
-            const upgradedIng = [...state.ingredients];
-            upgradedIng[state.editedIngIndex] = updatedIng;    
-            return{
+                const ingredient = state.ingredients[state.editedIngIndex];
+                const updatedIng = { ...ingredient, ...action.payload};
+                const upgradedIng = [...state.ingredients];
+                upgradedIng[state.editedIngIndex] = updatedIng;    
+                return{
 
-                    ...state,
-                    ingredients:upgradedIng, 
-                    editedIngIndex:-1,
-                    editedIngredient: null
-                }
+                        ...state,
+                        ingredients:upgradedIng, 
+                        editedIngIndex:-1,
+                        editedIngredient: null
+                    }
 
 
             case ShoppingListActions.DELETE_INGREDIENT:
