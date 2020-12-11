@@ -88,7 +88,8 @@ export class AuthService {
             email:email,
             password:password,
             returnSecureToken:true
-        }).pipe(catchError(this.handleError),tap(resdata =>{
+        })
+        .pipe(catchError(this.handleError),tap(resdata =>{
             this.handleAuthentication(
                  resdata.email,
                  resdata.localId, 
@@ -149,7 +150,8 @@ export class AuthService {
 
                 //  this.user.next(loadedUser);
                 this.store.dispatch( 
-                    new AuthAction.Login({email: loadedUser.email,
+                    new AuthAction.Login(
+                    {email: loadedUser.email,
                      userId: loadedUser.id,
                      token: loadedUser.token, 
                      expirationDate:new Date(userData._tokenExpirationDate) }))

@@ -3,12 +3,16 @@ import { User } from '../user.model';
 import * as AuthAction  from './auth.action';
 
 export interface State {
-    user: User
+    user: User;
+    authError: string;
+    loading: boolean;
 
 }
 
 const initialState : State = {
     user: null,
+    authError : null,
+    loading: false
 
 }
 
@@ -23,15 +27,30 @@ export function AuthReducer(state = initialState, action:AuthAction.AuthActions)
                 action.payload.expirationDate );
             return {
                 ...state,
-                user :usr
+                user :usr,
+                loading: false
             }
 
         case AuthAction.LOGOUT:
             return {
                 ...state,
-                user: null
+                user: null, 
+                loading:false
 
             }
+        case AuthAction.LOGIN_START:
+            return{
+                ...state,
+                authError: null,
+                loading: true
+            }
+        case AuthAction.LOGIN_FAIL:
+            return{
+                ...state,
+                authError: action.payload,
+                loading: false
+            }
+
         default:
                 return state;
     }
