@@ -19,6 +19,7 @@ import * as AuthAction from './store/auth.action';
 export class AuthComponent implements OnInit,OnDestroy{
 
     private closeSub: Subscription
+    private storeSub: Subscription
 
 
     isLoginMode = true;
@@ -37,7 +38,7 @@ export class AuthComponent implements OnInit,OnDestroy{
         this.isLoginMode = !this.isLoginMode;
     }
     ngOnInit(){
-        this.store.select('auth').subscribe(authState => {
+        this.storeSub = this.store.select('auth').subscribe(authState => {
 
             this.isLoading = authState.loading;
             this.error = authState.authError;
@@ -51,6 +52,7 @@ export class AuthComponent implements OnInit,OnDestroy{
     }
     ngOnDestroy(){
         if(this.closeSub) this.closeSub.unsubscribe();
+        this.storeSub.unsubscribe();
     }
 
     onSubmit(form:NgForm){
@@ -73,7 +75,8 @@ export class AuthComponent implements OnInit,OnDestroy{
 
         }
         else{
-            authObs = this.authService.signUp(email, password)
+            // authObs = this.authService.signUp(email, password)
+            this.store.dispatch( new AuthAction.Singup({email:email, password:password}))
         }
 
 
@@ -94,7 +97,7 @@ export class AuthComponent implements OnInit,OnDestroy{
     }
 
     handleError(){
-        this.error= null;
+        this.store.dispatch(new AuthAction.ClearError)
     }
 
     private showAlert(errMsg:string){

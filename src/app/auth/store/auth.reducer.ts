@@ -1,4 +1,5 @@
 
+import { sample } from 'rxjs/operators';
 import { User } from '../user.model';
 import * as AuthAction  from './auth.action';
 
@@ -39,6 +40,7 @@ export function AuthReducer(state = initialState, action:AuthAction.AuthActions)
 
             }
         case AuthAction.LOGIN_START:
+        case AuthAction.SIGNUP_START:
             return{
                 ...state,
                 authError: null,
@@ -49,6 +51,12 @@ export function AuthReducer(state = initialState, action:AuthAction.AuthActions)
                 ...state,
                 authError: action.payload,
                 loading: false
+            }
+        case AuthAction.CLEAER_ERROR:
+            return{
+                ...state,
+                authError: null
+
             }
 
         default:

@@ -18,10 +18,66 @@ export interface AuthResponseData{
 
 }
 
+const handleAuthentication = (expiresIn : number, email: string, localId:string, token:string) => {
+    const expirationDate= new Date(new Date().getTime() + +expiresIn * 1000);
+    return new AuthAction.Login({
+        email:email, 
+        userId:localId,
+        token:token,
+        expirationDate: expirationDate});
+};
+
+const handleError = (errorRes) => {
+    let errorMessage = 'An unknown error occurred!';
+    if (!errorRes.error || !errorRes.error.error) {
+      return of(new AuthAction.LoginFail(errorMessage));
+    }
+    switch (errorRes.error.error.message) {
+      case 'EMAIL_EXISTS':
+        errorMessage = 'This email exists already';
+        break;
+      case 'EMAIL_NOT_FOUND':
+        errorMessage = 'This email does not exist.';
+        break;
+      case 'INVALID_PASSWORD':
+        errorMessage = 'This password is not correct.';
+        break;
+    }
+    return of(new AuthAction.LoginFail(errorMessage));
+}
+
 @Injectable()
 export class AuthEffect{
     constructor(private action$:Actions, private http: HttpClient, private router:Router) {}
 
+    @Effect()
+    authSignup = this.action$.pipe(
+        ofType(AuthAction.SIGNUP_START),
+        switchMap((signupStart:AuthAction.Singup)=>{
+            return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCzPED_KFtXun8NdNIclGRbqgTTcYtvhMM',
+            {
+                email: signupStart.payload.email,
+                password: signupStart.payload.password,
+                returnSecureToken:true
+    
+            }
+            )
+            .pipe(
+                map( resData => {
+                  return handleAuthentication(
+                      +resData.expiresIn, 
+                      resData.email, 
+                      resData.localId, 
+                      resData.idToken)
+                })  ,
+                
+            catchError(errorRes =>{
+                    return handleError(errorRes);
+            }), 
+
+        );
+        })
+    )
     @Effect()
     authlogin= this.action$.pipe(
         ofType(AuthAction.LOGIN_START),
@@ -36,31 +92,15 @@ export class AuthEffect{
             })
             .pipe(
                 map( resData => {
-                    const expirationDate= new Date(new Date().getTime() + +resData.expiresIn * 1000);
-                   return new AuthAction.Login({
-                       email:resData.email, 
-                       userId:resData.localId,
-                       token: resData.idToken,
-                       expirationDate: expirationDate});
-                })  ,
+                    return handleAuthentication(
+                        +resData.expiresIn, 
+                        resData.email, 
+                        resData.localId, 
+                        resData.idToken) 
+                     }),
                 
             catchError(errorRes =>{
-                let errorMessage = 'An unknown error occurred!';
-                if (!errorRes.error || !errorRes.error.error) {
-                  return of(new AuthAction.LoginFail(errorMessage));
-                }
-                switch (errorRes.error.error.message) {
-                  case 'EMAIL_EXISTS':
-                    errorMessage = 'This email exists already';
-                    break;
-                  case 'EMAIL_NOT_FOUND':
-                    errorMessage = 'This email does not exist.';
-                    break;
-                  case 'INVALID_PASSWORD':
-                    errorMessage = 'This password is not correct.';
-                    break;
-                }
-                return of(new AuthAction.LoginFail(errorMessage));
+               return handleError(errorRes)
             }), 
 
         );
